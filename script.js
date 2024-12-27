@@ -2,27 +2,73 @@ const toggleButton = document.getElementById('toggle-button')
 const lightModeIcon = document.getElementById('light-mode')
 const darkModeIcon = document.getElementById('dark-mode')
 
-let isLightMode = true
+function show() {
+    document.querySelector('.add-task').style.display = 'flex';
 
-toggleButton.addEventListener('click', () => {
-    if (isLightMode) {
-        darkModeIcon.style.display = 'flex'
-        lightModeIcon.style.display = 'none'
-        isLightMode = false
+}
 
-    } else {
-        darkModeIcon.style.display = 'none'
-        lightModeIcon.style.display = 'flex'
-        isLightMode = true   
+function cancelAdd() {
+    document.querySelector('.add-task').style.display = 'none';
+}
+
+const addtaskbutton = document.getElementById("add-task-button")
+const mainaddtask = document.getElementsByClassName("main-add-task")
+ 
+
+function addTask() {
+    const title = document.getElementById('title-input').value;
+    const description = document.getElementById('description-input').value;
+
+    if (!title || !description) {
+        alert("Please fill out both title and description.");
+        return;
     }
-    const currentTheme= document.documentElement.getAttribute('data-theme');
-    const newTheme= currentTheme === 'light' ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme',newTheme);
-})
 
-const addButton = document.getElementById("button");
+    const statusInputValue = document.getElementById("status-select").value;
+    const priorityInputValue = document.getElementById("priority-select").value;
 
-document.getElementById("button").addEventListener("click", function() {
-    let addtask = document.getElementById("add-task");
-    addtask.style.display = "flex";
+    const inputObj = {
+        title: title,
+        description: description,
+        status: statusInputValue,
+        priority: priorityInputValue,
+    };
+
+    const task = document.createElement('div');
+    task.classList.add('task');
+    const defaultContainer = document.querySelector('#details');
+
+    task.innerHTML = `
+        <div class="details">
+            <h4>${title}</h4>
+            <p>${description}</p>
+            <div class="priority">Priority: ${priorityInputValue}</div>
+        </div>
+    `;
+    if (defaultContainer) {
+        defaultContainer.appendChild(task);
+    } else {
+        console.error("No element with class 'default' found.");
+    }
+
+    cancelAdd();
+}
+
+
+
+document.getElementById('toggle-button').addEventListener('click', function () {
+
+    const body = document.body;
+    const darkModeIcon = document.getElementById('dark-mode');
+    const lightModeIcon = document.getElementById('light-mode');
+
+    if (body.getAttribute('data-theme') === 'dark') {
+        body.setAttribute('data-theme', 'light');
+        lightModeIcon.style.display = 'flex';
+        darkModeIcon.style.display = 'none';
+    } else {
+        body.setAttribute('data-theme', 'dark');
+        lightModeIcon.style.display = 'none';
+        darkModeIcon.style.display = 'flex';
+    }
 });
